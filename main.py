@@ -3,10 +3,7 @@ import sys
 from settings import *
 from managers.state_manager import GameStateManager
 from managers.highscore_manager import HighscoreManager
-<<<<<<< HEAD
 from managers.sound_manager import SoundManager
-=======
->>>>>>> origin/main
 from ui.menu import MainMenu
 from games.snake import SnakeGame
 from games.tetris import TetrisGame
@@ -23,10 +20,8 @@ def main():
 
     # Initialize Managers first (required for callbacks)
     highscore_manager = HighscoreManager()
-<<<<<<< HEAD
     sound_manager = SoundManager()
-=======
->>>>>>> origin/main
+    sound_manager.play_music()
     
     # Initialize State Manager before games (games need access to it via callback)
     state_manager = GameStateManager(None)
@@ -41,21 +36,12 @@ def main():
         state_manager.set_state(menu)
     
     # Now initialize games with the valid callback
-<<<<<<< HEAD
     snake_game = SnakeGame(screen, return_to_menu, highscore_manager, sound_manager, "Snake")
     tetris_game = TetrisGame(screen, return_to_menu, highscore_manager, sound_manager, "Tetris")
     breakout_game = BreakoutGame(screen, return_to_menu, highscore_manager, sound_manager, "Breakout")
     pong_game = PongGame(screen, return_to_menu, highscore_manager, sound_manager, "Pong")
     invaders_game = InvadersGame(screen, return_to_menu, highscore_manager, sound_manager, "Invaders")
     flappy_game = FlappyGame(screen, return_to_menu, highscore_manager, sound_manager, "Flappy")
-=======
-    snake_game = SnakeGame(screen, return_to_menu, highscore_manager, "Snake")
-    tetris_game = TetrisGame(screen, return_to_menu, highscore_manager, "Tetris")
-    breakout_game = BreakoutGame(screen, return_to_menu, highscore_manager, "Breakout")
-    pong_game = PongGame(screen, return_to_menu, highscore_manager, "Pong")
-    invaders_game = InvadersGame(screen, return_to_menu, highscore_manager, "Invaders")
-    flappy_game = FlappyGame(screen, return_to_menu, highscore_manager, "Flappy")
->>>>>>> origin/main
 
     # Dictionary of games for the menu
     games_dict = {

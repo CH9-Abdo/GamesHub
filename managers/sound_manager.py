@@ -35,3 +35,18 @@ class SoundManager:
     def play(self, sound_name):
         if sound_name in self.sounds:
             self.sounds[sound_name].play()
+
+    def play_music(self):
+        music_path = os.path.join(self.sound_dir, "music.wav")
+        if os.path.exists(music_path):
+            try:
+                pygame.mixer.music.load(music_path)
+                pygame.mixer.music.set_volume(0.2)
+                pygame.mixer.music.play(-1) # Loop indefinitely
+            except Exception as e:
+                print(f"Failed to load music: {e}")
+        else:
+            print("Music file not found.")
+
+    def stop_music(self):
+        pygame.mixer.music.stop()

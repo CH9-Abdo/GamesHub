@@ -11,6 +11,7 @@ class MainMenu:
         self.selected_index = 0
         self.font_title = pygame.font.SysFont(FONT_NAME, FONT_SIZE_TITLE)
         self.font_menu = pygame.font.SysFont(FONT_NAME, FONT_SIZE_MENU)
+        self.font_small = pygame.font.SysFont(FONT_NAME, 20)
         
         # Background Particles
         self.particles = []
@@ -56,15 +57,16 @@ class MainMenu:
 
         # Draw Title
         title_surf = self.font_title.render(TITLE, True, COLORS["ACCENT"])
-        title_rect = title_surf.get_rect(center=(SCREEN_WIDTH // 2, 100))
+        title_rect = title_surf.get_rect(center=(SCREEN_WIDTH // 2, 80))
         
         # Simple Shadow for Title
         shadow_surf = self.font_title.render(TITLE, True, COLORS["HIGHLIGHT"])
-        shadow_rect = shadow_surf.get_rect(center=(SCREEN_WIDTH // 2 + 3, 100 + 3))
+        shadow_rect = shadow_surf.get_rect(center=(SCREEN_WIDTH // 2 + 3, 80 + 3))
         self.screen.blit(shadow_surf, shadow_rect)
         self.screen.blit(title_surf, title_rect)
 
-        # Draw Menu Options
+        # Draw Menu Options with High Scores
+        start_y = 200
         for i, name in enumerate(self.game_names):
             if i == self.selected_index:
                 color = COLORS["HIGHLIGHT"]
@@ -74,9 +76,20 @@ class MainMenu:
                 color = COLORS["TEXT"]
                 indicator = "  "
             
+            # Game Name
             text_surf = self.font_menu.render(indicator + name, True, color)
-            rect = text_surf.get_rect(center=(SCREEN_WIDTH // 2, 250 + i * 50))
+            rect = text_surf.get_rect(center=(SCREEN_WIDTH // 2, start_y + i * 60))
             self.screen.blit(text_surf, rect)
+            
+            # High Score (if applicable)
+            if name != "Quit":
+                game_instance = self.games[name]
+                if game_instance.highscore_manager:
+                    high_score = game_instance.highscore_manager.get_score(name)
+                    if high_score > 0:
+                        score_surf = self.font_small.render(f"High: {high_score}", True, COLORS["GRID"])
+                        score_rect = score_surf.get_rect(midtop=(SCREEN_WIDTH // 2, rect.bottom - 5))
+                        self.screen.blit(score_surf, score_rect)
 
         # Draw Instructions
         inst_surf = self.font_menu.render("ARROWS to Select, ENTER to Play", True, COLORS["GRID"])
