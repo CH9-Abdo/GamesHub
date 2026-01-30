@@ -4,8 +4,8 @@ from settings import *
 from games.base_game import BaseGame
 
 class SnakeGame(BaseGame):
-    def __init__(self, screen, return_to_menu_callback):
-        super().__init__(screen)
+    def __init__(self, screen, return_to_menu_callback, highscore_manager=None, game_name="Snake"):
+        super().__init__(screen, create_game_callback=None, game_over_callback=None, highscore_manager=highscore_manager, game_name=game_name)
         self.return_to_menu = return_to_menu_callback
         self.reset()
         self.font = pygame.font.SysFont(FONT_NAME, FONT_SIZE_HUD)
@@ -67,6 +67,7 @@ class SnakeGame(BaseGame):
             new_head[0] < 0 or new_head[0] >= SNAKE_GRID_WIDTH or
             new_head[1] < 0 or new_head[1] >= SNAKE_GRID_HEIGHT):
             self.game_over = True
+            self.check_and_save_highscore(self.score)
             return
 
         self.snake.insert(0, new_head)
@@ -101,20 +102,8 @@ class SnakeGame(BaseGame):
         self.screen.blit(score_surf, (10, 10))
 
         if self.game_over:
-            self._draw_game_over()
+            self.draw_game_over_overlay(f"Score: {self.score}")
 
     def _draw_game_over(self):
-        overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        overlay.set_alpha(128)
-        overlay.fill(COLORS["BLACK"])
-        self.screen.blit(overlay, (0, 0))
-
-        font_big = pygame.font.SysFont(FONT_NAME, 64)
-        text = font_big.render("GAME OVER", True, COLORS["DANGER"])
-        text_rect = text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 50))
-        self.screen.blit(text, text_rect)
-
-        font_small = pygame.font.SysFont(FONT_NAME, 32)
-        restart_text = font_small.render("Press SPACE to Restart or ESC for Menu", True, COLORS["TEXT"])
-        restart_rect = restart_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 20))
-        self.screen.blit(restart_text, restart_rect)
+        # Deprecated, using BaseGame.draw_game_over_overlay
+        pass

@@ -4,8 +4,8 @@ from settings import *
 from games.base_game import BaseGame
 
 class InvadersGame(BaseGame):
-    def __init__(self, screen, return_to_menu_callback):
-        super().__init__(screen)
+    def __init__(self, screen, return_to_menu_callback, highscore_manager=None, game_name="Invaders"):
+        super().__init__(screen, create_game_callback=None, game_over_callback=None, highscore_manager=highscore_manager, game_name=game_name)
         self.return_to_menu = return_to_menu_callback
         self.font = pygame.font.SysFont(FONT_NAME, FONT_SIZE_HUD)
         self.reset()

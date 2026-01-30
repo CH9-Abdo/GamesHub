@@ -25,8 +25,8 @@ COLORS_LIST = [
 ]
 
 class TetrisGame(BaseGame):
-    def __init__(self, screen, return_to_menu_callback):
-        super().__init__(screen)
+    def __init__(self, screen, return_to_menu_callback, highscore_manager=None, game_name="Tetris"):
+        super().__init__(screen, create_game_callback=None, game_over_callback=None, highscore_manager=highscore_manager, game_name=game_name)
         self.return_to_menu = return_to_menu_callback
         self.font = pygame.font.SysFont(FONT_NAME, FONT_SIZE_HUD)
         self.reset()
@@ -124,6 +124,7 @@ class TetrisGame(BaseGame):
                     grid_x = self.current_piece['x'] + c
                     if grid_y < 0:
                         self.game_over = True
+                        self.check_and_save_highscore(self.score)
                         return
                     self.grid[grid_y][grid_x] = self.current_piece['color']
         
@@ -133,6 +134,7 @@ class TetrisGame(BaseGame):
         
         if self._check_collision(self.current_piece['shape'], self.current_piece['x'], self.current_piece['y']):
             self.game_over = True
+            self.check_and_save_highscore(self.score)
 
     def _clear_lines(self):
         lines_cleared = 0
@@ -185,7 +187,7 @@ class TetrisGame(BaseGame):
         self._draw_ui()
 
         if self.game_over:
-            self._draw_game_over()
+            self.draw_game_over_overlay(f"Score: {self.score}")
 
     def _draw_block(self, x, y, color, outline=False):
         rect = pygame.Rect(TETRIS_OFFSET_X + x * TETRIS_CELL_SIZE, 
@@ -217,20 +219,3 @@ class TetrisGame(BaseGame):
                                        TETRIS_CELL_SIZE, TETRIS_CELL_SIZE)
                     pygame.draw.rect(self.screen, self.next_piece['color'], rect)
                     pygame.draw.rect(self.screen, COLORS["BACKGROUND"], rect, 1)
-
-    def _draw_game_over(self):
-        # ...reuse similar game over logic or make a shared UI component...
-        overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        overlay.set_alpha(128)
-        overlay.fill(COLORS["BLACK"])
-        self.screen.blit(overlay, (0, 0))
-        
-        font_big = pygame.font.SysFont(FONT_NAME, 64)
-        text = font_big.render("GAME OVER", True, COLORS["DANGER"])
-        text_rect = text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
-        self.screen.blit(text, text_rect)
-        
-        font_small = pygame.font.SysFont(FONT_NAME, 24)
-        msg = font_small.render("Press SPACE to Restart or ESC for Menu", True, COLORS["TEXT"])
-        msg_rect = msg.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50))
-        self.screen.blit(msg, msg_rect)
