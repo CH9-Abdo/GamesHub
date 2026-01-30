@@ -4,8 +4,8 @@ from settings import *
 from games.base_game import BaseGame
 
 class SnakeGame(BaseGame):
-    def __init__(self, screen, return_to_menu_callback, highscore_manager=None, game_name="Snake"):
-        super().__init__(screen, create_game_callback=None, game_over_callback=None, highscore_manager=highscore_manager, game_name=game_name)
+    def __init__(self, screen, return_to_menu_callback, highscore_manager=None, sound_manager=None, game_name="Snake"):
+        super().__init__(screen, create_game_callback=None, game_over_callback=None, highscore_manager=highscore_manager, sound_manager=sound_manager, game_name=game_name)
         self.return_to_menu = return_to_menu_callback
         self.reset()
         self.font = pygame.font.SysFont(FONT_NAME, FONT_SIZE_HUD)
@@ -67,6 +67,7 @@ class SnakeGame(BaseGame):
             new_head[0] < 0 or new_head[0] >= SNAKE_GRID_WIDTH or
             new_head[1] < 0 or new_head[1] >= SNAKE_GRID_HEIGHT):
             self.game_over = True
+            self.play_sound("gameover")
             self.check_and_save_highscore(self.score)
             return
 
@@ -75,6 +76,7 @@ class SnakeGame(BaseGame):
         # Check Food
         if new_head == self.food:
             self.score += 10
+            self.play_sound("score")
             self.food = self._get_random_food_position()
             # Speed up slightly
             self.move_interval = max(50, 150 - (self.score // 50) * 5)

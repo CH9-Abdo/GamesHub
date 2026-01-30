@@ -25,8 +25,8 @@ COLORS_LIST = [
 ]
 
 class TetrisGame(BaseGame):
-    def __init__(self, screen, return_to_menu_callback, highscore_manager=None, game_name="Tetris"):
-        super().__init__(screen, create_game_callback=None, game_over_callback=None, highscore_manager=highscore_manager, game_name=game_name)
+    def __init__(self, screen, return_to_menu_callback, highscore_manager=None, sound_manager=None, game_name="Tetris"):
+        super().__init__(screen, create_game_callback=None, game_over_callback=None, highscore_manager=highscore_manager, sound_manager=sound_manager, game_name=game_name)
         self.return_to_menu = return_to_menu_callback
         self.font = pygame.font.SysFont(FONT_NAME, FONT_SIZE_HUD)
         self.reset()
@@ -124,6 +124,7 @@ class TetrisGame(BaseGame):
                     grid_x = self.current_piece['x'] + c
                     if grid_y < 0:
                         self.game_over = True
+                        self.play_sound("gameover")
                         self.check_and_save_highscore(self.score)
                         return
                     self.grid[grid_y][grid_x] = self.current_piece['color']
@@ -134,6 +135,7 @@ class TetrisGame(BaseGame):
         
         if self._check_collision(self.current_piece['shape'], self.current_piece['x'], self.current_piece['y']):
             self.game_over = True
+            self.play_sound("gameover")
             self.check_and_save_highscore(self.score)
 
     def _clear_lines(self):
@@ -144,6 +146,8 @@ class TetrisGame(BaseGame):
             new_grid.insert(0, [0 for _ in range(TETRIS_COLS)])
         self.grid = new_grid
         self.score += lines_cleared * 100
+        if lines_cleared > 0:
+            self.play_sound("score")
 
     def _hard_drop(self):
         while self._move(0, 1):

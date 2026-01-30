@@ -4,8 +4,8 @@ from settings import *
 from games.base_game import BaseGame
 
 class BreakoutGame(BaseGame):
-    def __init__(self, screen, return_to_menu_callback, highscore_manager=None, game_name="Breakout"):
-        super().__init__(screen, create_game_callback=None, game_over_callback=None, highscore_manager=highscore_manager, game_name=game_name)
+    def __init__(self, screen, return_to_menu_callback, highscore_manager=None, sound_manager=None, game_name="Breakout"):
+        super().__init__(screen, create_game_callback=None, game_over_callback=None, highscore_manager=highscore_manager, sound_manager=sound_manager, game_name=game_name)
         self.return_to_menu = return_to_menu_callback
         self.font = pygame.font.SysFont(FONT_NAME, FONT_SIZE_HUD)
         self.reset()
@@ -95,14 +95,17 @@ class BreakoutGame(BaseGame):
             self.lives -= 1
             if self.lives <= 0:
                 self.game_over = True
+                self.play_sound("gameover")
                 self.check_and_save_highscore(self.score)
             else:
+                self.play_sound("explosion")
                 # Reset ball
                 self.ball_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
                 self.ball_speed = [5 * random.choice([-1, 1]), -5]
 
         # Paddle Collision
         if self.ball_rect.colliderect(self.paddle_rect):
+            self.play_sound("select")
             self.ball_speed[1] = -abs(self.ball_speed[1]) # Bounce up
             # Adjust angle based on hit position
             offset = (self.ball_rect.centerx - self.paddle_rect.centerx) / (BREAKOUT_PADDLE_WIDTH / 2)
@@ -115,6 +118,7 @@ class BreakoutGame(BaseGame):
             brick = self.bricks.pop(hit_index)
             self.ball_speed[1] = -self.ball_speed[1]
             self.score += 10
+            self.play_sound("score")
             if not self.bricks:
                 self.won = True
                 self.check_and_save_highscore(self.score)

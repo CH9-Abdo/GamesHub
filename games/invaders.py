@@ -4,8 +4,8 @@ from settings import *
 from games.base_game import BaseGame
 
 class InvadersGame(BaseGame):
-    def __init__(self, screen, return_to_menu_callback, highscore_manager=None, game_name="Invaders"):
-        super().__init__(screen, create_game_callback=None, game_over_callback=None, highscore_manager=highscore_manager, game_name=game_name)
+    def __init__(self, screen, return_to_menu_callback, highscore_manager=None, sound_manager=None, game_name="Invaders"):
+        super().__init__(screen, create_game_callback=None, game_over_callback=None, highscore_manager=highscore_manager, sound_manager=sound_manager, game_name=game_name)
         self.return_to_menu = return_to_menu_callback
         self.font = pygame.font.SysFont(FONT_NAME, FONT_SIZE_HUD)
         self.reset()
@@ -105,6 +105,7 @@ class InvadersGame(BaseGame):
                     self.enemies.remove(e)
                     self.bullets.remove(b)
                     self.score += 100
+                    self.play_sound("explosion")
                     hit = True
                     break
             if hit: continue
@@ -125,8 +126,10 @@ class InvadersGame(BaseGame):
             elif b.colliderect(self.player_rect):
                 self.lives -= 1
                 self.enemy_bullets.remove(b)
+                self.play_sound("explosion")
                 if self.lives <= 0:
                     self.game_over = True
+                    self.play_sound("gameover")
 
         if not self.enemies:
             self.won = True
@@ -136,6 +139,7 @@ class InvadersGame(BaseGame):
         if current_time - self.last_shot > 400: # Cooldown
             bullet = pygame.Rect(self.player_rect.centerx - 2, self.player_rect.top, 4, 10)
             self.bullets.append(bullet)
+            self.play_sound("shoot")
             self.last_shot = current_time
 
     def draw(self):
