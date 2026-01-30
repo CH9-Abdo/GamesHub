@@ -125,19 +125,40 @@ class SnakeGame(BaseGame):
     def draw(self):
         self.screen.fill(COLORS["BACKGROUND"])
 
-        # Draw Snake
-        for i, (x, y) in enumerate(self.snake):
-            rect = pygame.Rect(x * SNAKE_CELL_SIZE, y * SNAKE_CELL_SIZE,
-                             SNAKE_CELL_SIZE, SNAKE_CELL_SIZE)
-            color = COLORS["SUCCESS"] if i == 0 else COLORS["ACCENT"] # Head is different
-            pygame.draw.rect(self.screen, color, rect)
-            pygame.draw.rect(self.screen, COLORS["BACKGROUND"], rect, 1) # Border
+        # Draw Grid (Subtle)
+        for x in range(0, SCREEN_WIDTH, SNAKE_CELL_SIZE):
+            pygame.draw.line(self.screen, (20, 20, 30), (x, 0), (x, SCREEN_HEIGHT))
+        for y in range(0, SCREEN_HEIGHT, SNAKE_CELL_SIZE):
+            pygame.draw.line(self.screen, (20, 20, 30), (0, y), (SCREEN_WIDTH, y))
 
-        # Draw Food
+        # Draw Snake (Rounded Rects)
+        for i, (x, y) in enumerate(self.snake):
+            rect = pygame.Rect(x * SNAKE_CELL_SIZE + 1, y * SNAKE_CELL_SIZE + 1,
+                             SNAKE_CELL_SIZE - 2, SNAKE_CELL_SIZE - 2)
+            color = COLORS["SUCCESS"] if i == 0 else COLORS["ACCENT"] # Head is different
+            
+            # Rounded corners
+            pygame.draw.rect(self.screen, color, rect, border_radius=5)
+            
+            # Eyes for Head
+            if i == 0:
+                eye_radius = 2
+                offset = 5
+                # Simple logic to position eyes based on direction
+                dx, dy = self.direction
+                eye1_pos = (rect.centerx - offset if dx == 0 else rect.centerx, rect.centery - offset if dy == 0 else rect.centery)
+                eye2_pos = (rect.centerx + offset if dx == 0 else rect.centerx, rect.centery + offset if dy == 0 else rect.centery)
+                if dx != 0: eye1_pos, eye2_pos = (rect.centerx + dx*3, rect.centery - offset), (rect.centerx + dx*3, rect.centery + offset)
+                if dy != 0: eye1_pos, eye2_pos = (rect.centerx - offset, rect.centery + dy*3), (rect.centerx + offset, rect.centery + dy*3)
+                
+                pygame.draw.circle(self.screen, COLORS["BLACK"], eye1_pos, eye_radius)
+                pygame.draw.circle(self.screen, COLORS["BLACK"], eye2_pos, eye_radius)
+
+
+        # Draw Food (Circle)
         fx, fy = self.food
-        food_rect = pygame.Rect(fx * SNAKE_CELL_SIZE, fy * SNAKE_CELL_SIZE,
-                                SNAKE_CELL_SIZE, SNAKE_CELL_SIZE)
-        pygame.draw.rect(self.screen, COLORS["HIGHLIGHT"], food_rect)
+        food_center = (fx * SNAKE_CELL_SIZE + SNAKE_CELL_SIZE // 2, fy * SNAKE_CELL_SIZE + SNAKE_CELL_SIZE // 2)
+        pygame.draw.circle(self.screen, COLORS["HIGHLIGHT"], food_center, SNAKE_CELL_SIZE // 2 - 2)
 
         # Draw Powerup
         if self.powerup:
@@ -151,7 +172,9 @@ class SnakeGame(BaseGame):
             elif self.powerup['type'] == 'BONUS': p_color = COLORS["WARNING"]
             elif self.powerup['type'] == 'CUT': p_color = (100, 100, 100)
             
-            pygame.draw.circle(self.screen, p_color, p_rect.center, SNAKE_CELL_SIZE // 2)
+            # Star shape or just a smaller circle with ring
+            pygame.draw.circle(self.screen, p_color, p_rect.center, SNAKE_CELL_SIZE // 2 - 2)
+            pygame.draw.circle(self.screen, COLORS["WHITE"], p_rect.center, SNAKE_CELL_SIZE // 2 - 2, 1)
 
         # Draw Score
         score_surf = self.font.render(f"Score: {self.score}", True, COLORS["TEXT"])

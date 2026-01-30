@@ -11,6 +11,7 @@ from games.breakout import BreakoutGame
 from games.pong import PongGame
 from games.invaders import InvadersGame
 from games.flappy import FlappyGame
+from games.minesweeper import MinesweeperGame
 
 def main():
     pygame.init()
@@ -42,6 +43,7 @@ def main():
     pong_game = PongGame(screen, return_to_menu, highscore_manager, sound_manager, "Pong")
     invaders_game = InvadersGame(screen, return_to_menu, highscore_manager, sound_manager, "Invaders")
     flappy_game = FlappyGame(screen, return_to_menu, highscore_manager, sound_manager, "Flappy")
+    minesweeper_game = MinesweeperGame(screen, return_to_menu, highscore_manager, sound_manager, "Minesweeper")
 
     # Dictionary of games for the menu
     games_dict = {
@@ -50,7 +52,8 @@ def main():
         "Breakout": breakout_game,
         "Pong": pong_game,
         "Invaders": invaders_game,
-        "Flappy": flappy_game
+        "Flappy": flappy_game,
+        "Minesweeper": minesweeper_game
     }
     
     # Update menu with games dictionary
