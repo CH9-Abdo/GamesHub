@@ -1,3 +1,6 @@
 {
-    "Invaders": 4000
+    "Invaders": 4000,
+    "Memory": 16,
+    "Asteroids": 180,
+    "Snake": 60
 }

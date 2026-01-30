@@ -65,11 +65,16 @@ class MainMenu:
         self.screen.blit(shadow_surf, shadow_rect)
         self.screen.blit(title_surf, title_rect)
 
-        # Draw Menu Panel
+        # Draw Menu Panel - size to fit all games (scroll-friendly if more added later)
         panel_width = 500
-        panel_height = 400
+        num_items = len(self.game_names)
+        line_height = max(36, min(50, (400 - 40) // num_items))  # fit in ~400px, clamp 36–50
+        panel_height = num_items * line_height + 40
+        panel_height = min(panel_height, SCREEN_HEIGHT - 220)  # don't overflow screen
         panel_rect = pygame.Rect((SCREEN_WIDTH - panel_width) // 2, 150, panel_width, panel_height)
-        
+        start_y = panel_rect.top + 22
+        line_height = (panel_height - 44) // num_items  # even spacing
+
         # Semi-transparent background for panel
         s = pygame.Surface((panel_width, panel_height))
         s.set_alpha(50)
@@ -78,15 +83,15 @@ class MainMenu:
         pygame.draw.rect(self.screen, COLORS["ACCENT"], panel_rect, 2)
 
         # Draw Menu Options with High Scores aligned
-        start_y = 180
-        line_height = 50
-        
+        item_font = self.font_small if num_items > 8 else self.font_menu
+
         for i, name in enumerate(self.game_names):
             y_pos = start_y + i * line_height
-            
+            row_center_y = y_pos + line_height // 2
+
             # Selection Highlight
             if i == self.selected_index:
-                highlight_rect = pygame.Rect(panel_rect.left + 10, y_pos - 10, panel_width - 20, line_height)
+                highlight_rect = pygame.Rect(panel_rect.left + 10, y_pos + 2, panel_width - 20, line_height - 4)
                 pygame.draw.rect(self.screen, (30, 30, 50), highlight_rect)
                 pygame.draw.rect(self.screen, COLORS["HIGHLIGHT"], highlight_rect, 1)
                 color = COLORS["HIGHLIGHT"]
@@ -94,11 +99,12 @@ class MainMenu:
             else:
                 color = COLORS["TEXT"]
                 indicator = ""
-            
+
             # Game Name (Left Aligned)
-            name_surf = self.font_menu.render(f"{indicator} {name}", True, color)
-            self.screen.blit(name_surf, (panel_rect.left + 30, y_pos))
-            
+            name_surf = item_font.render(f"{indicator} {name}", True, color)
+            name_rect = name_surf.get_rect(midleft=(panel_rect.left + 30, row_center_y))
+            self.screen.blit(name_surf, name_rect)
+
             # High Score (Right Aligned)
             if name != "Quit":
                 game_instance = self.games[name]
@@ -106,12 +112,12 @@ class MainMenu:
                     high_score = game_instance.highscore_manager.get_score(name)
                     score_text = f"{high_score}" if high_score > 0 else "-"
                     score_surf = self.font_small.render(score_text, True, COLORS["ACCENT"])
-                    score_rect = score_surf.get_rect(right=panel_rect.right - 30, centery=y_pos + 15)
+                    score_rect = score_surf.get_rect(right=panel_rect.right - 30, centery=row_center_y)
                     self.screen.blit(score_surf, score_rect)
-                    
+
                     # Label "Best"
                     label_surf = self.font_small.render("Best:", True, COLORS["GRID"])
-                    label_rect = label_surf.get_rect(right=score_rect.left - 10, centery=y_pos + 15)
+                    label_rect = label_surf.get_rect(right=score_rect.left - 10, centery=row_center_y)
                     self.screen.blit(label_surf, label_rect)
 
         # Draw Instructions

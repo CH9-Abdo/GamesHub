@@ -12,6 +12,8 @@ from games.pong import PongGame
 from games.invaders import InvadersGame
 from games.flappy import FlappyGame
 from games.minesweeper import MinesweeperGame
+from games.memory import MemoryGame
+from games.asteroids import AsteroidsGame
 
 def main():
     pygame.init()
@@ -44,6 +46,8 @@ def main():
     invaders_game = InvadersGame(screen, return_to_menu, highscore_manager, sound_manager, "Invaders")
     flappy_game = FlappyGame(screen, return_to_menu, highscore_manager, sound_manager, "Flappy")
     minesweeper_game = MinesweeperGame(screen, return_to_menu, highscore_manager, sound_manager, "Minesweeper")
+    memory_game = MemoryGame(screen, return_to_menu, highscore_manager, sound_manager, "Memory")
+    asteroids_game = AsteroidsGame(screen, return_to_menu, highscore_manager, sound_manager, "Asteroids")
 
     # Dictionary of games for the menu
     games_dict = {
@@ -53,7 +57,9 @@ def main():
         "Pong": pong_game,
         "Invaders": invaders_game,
         "Flappy": flappy_game,
-        "Minesweeper": minesweeper_game
+        "Minesweeper": minesweeper_game,
+        "Memory": memory_game,
+        "Asteroids": asteroids_game
     }
     
     # Update menu with games dictionary
