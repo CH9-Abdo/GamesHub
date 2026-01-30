@@ -4,8 +4,8 @@ from settings import *
 from games.base_game import BaseGame
 
 class BreakoutGame(BaseGame):
-    def __init__(self, screen, return_to_menu_callback):
-        super().__init__(screen)
+    def __init__(self, screen, return_to_menu_callback, highscore_manager=None, game_name="Breakout"):
+        super().__init__(screen, create_game_callback=None, game_over_callback=None, highscore_manager=highscore_manager, game_name=game_name)
         self.return_to_menu = return_to_menu_callback
         self.font = pygame.font.SysFont(FONT_NAME, FONT_SIZE_HUD)
         self.reset()
@@ -95,6 +95,7 @@ class BreakoutGame(BaseGame):
             self.lives -= 1
             if self.lives <= 0:
                 self.game_over = True
+                self.check_and_save_highscore(self.score)
             else:
                 # Reset ball
                 self.ball_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
@@ -116,6 +117,7 @@ class BreakoutGame(BaseGame):
             self.score += 10
             if not self.bricks:
                 self.won = True
+                self.check_and_save_highscore(self.score)
 
     def draw(self):
         self.screen.fill(COLORS["BACKGROUND"])
@@ -135,22 +137,6 @@ class BreakoutGame(BaseGame):
         self.screen.blit(score_surf, (10, 10))
 
         if self.game_over:
-            self._draw_overlay("GAME OVER", COLORS["DANGER"])
+            self.draw_game_over_overlay("GAME OVER")
         elif self.won:
-            self._draw_overlay("YOU WIN!", COLORS["SUCCESS"])
-
-    def _draw_overlay(self, message, color):
-        overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        overlay.set_alpha(128)
-        overlay.fill(COLORS["BLACK"])
-        self.screen.blit(overlay, (0, 0))
-        
-        font_big = pygame.font.SysFont(FONT_NAME, 64)
-        text = font_big.render(message, True, color)
-        text_rect = text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
-        self.screen.blit(text, text_rect)
-        
-        font_small = pygame.font.SysFont(FONT_NAME, 24)
-        msg = font_small.render("Press SPACE to Restart or ESC for Menu", True, COLORS["TEXT"])
-        msg_rect = msg.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50))
-        self.screen.blit(msg, msg_rect)
+            self.draw_game_over_overlay("YOU WIN!")

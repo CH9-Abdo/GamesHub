@@ -6,31 +6,36 @@ SCREEN_HEIGHT = 600
 FPS = 60
 TITLE = "Retro Games Hub"
 
-# Colors (Material Design / Retro Neon)
+# Colors (Neon / Cyberpunk Theme)
 COLORS = {
-    "BACKGROUND": (30, 30, 30),      # Dark Grey
-    "TEXT": (230, 230, 230),         # Off-White
-    "ACCENT": (0, 188, 212),         # Cyan
-    "HIGHLIGHT": (255, 64, 129),     # Pink
-    "SUCCESS": (0, 230, 118),        # Green
-    "WARNING": (255, 193, 7),        # Amber
-    "DANGER": (255, 82, 82),         # Red
+    "BACKGROUND": (10, 10, 15),      # Very Dark Blue/Black
+    "TEXT": (240, 240, 240),         # Off-White
+    "ACCENT": (0, 255, 255),         # Cyan Neon
+    "HIGHLIGHT": (255, 0, 255),      # Magenta Neon
+    "SUCCESS": (57, 255, 20),        # Neon Green
+    "WARNING": (255, 255, 0),        # Neon Yellow
+    "DANGER": (255, 50, 50),         # Neon Red
     "BLACK": (0, 0, 0),
     "WHITE": (255, 255, 255),
-    "GRID": (50, 50, 50)
+    "GRID": (40, 40, 60),            # Dark Blue-Grey
+    "PADDLE": (0, 255, 255),         # Cyan
+    "BALL": (255, 255, 255),         # White
+    "ENEMY": (255, 0, 100),          # Pink/Red
+    "PLAYER": (0, 200, 255)          # Light Blue
 }
 
 # Fonts
 FONT_NAME = "arial"  # Fallback
-FONT_SIZE_TITLE = 64
-FONT_SIZE_MENU = 32
-FONT_SIZE_HUD = 24
+FONT_SIZE_TITLE = 72
+FONT_SIZE_MENU = 40
+FONT_SIZE_HUD = 28
 
 # Game Specific Settings
+
 # Tetris
 TETRIS_COLS = 10
 TETRIS_ROWS = 20
-TETRIS_CELL_SIZE = 30
+TETRIS_CELL_SIZE = 28
 TETRIS_OFFSET_X = (SCREEN_WIDTH - (TETRIS_COLS * TETRIS_CELL_SIZE)) // 2
 TETRIS_OFFSET_Y = (SCREEN_HEIGHT - (TETRIS_ROWS * TETRIS_CELL_SIZE)) // 2
 
@@ -43,3 +48,60 @@ SNAKE_GRID_HEIGHT = SCREEN_HEIGHT // SNAKE_CELL_SIZE
 BREAKOUT_PADDLE_WIDTH = 100
 BREAKOUT_PADDLE_HEIGHT = 15
 BREAKOUT_BALL_RADIUS = 8
+
+# Pong
+PONG_PADDLE_WIDTH = 15
+PONG_PADDLE_HEIGHT = 90
+PONG_BALL_RADIUS = 10
+PONG_PADDLE_SPEED = 7
+PONG_BALL_SPEED_X = 6
+PONG_BALL_SPEED_Y = 6
+
+# Space Invaders
+INVADERS_PLAYER_SPEED = 5
+INVADERS_BULLET_SPEED = 7
+INVADERS_ENEMY_SPEED = 2
+INVADERS_DROP_SPEED = 10
+
+# Flappy
+FLAPPY_GRAVITY = 0.25
+FLAPPY_JUMP_STRENGTH = -6
+FLAPPY_PIPE_SPEED = 3
+FLAPPY_PIPE_GAP = 150
+FLAPPY_PIPE_FREQUENCY = 1500 # ms
+
+# Minesweeper
+MINESWEEPER_ROWS = 15
+MINESWEEPER_COLS = 20
+MINESWEEPER_MINES = 40
+MINESWEEPER_CELL_SIZE = 30
+MINESWEEPER_OFFSET_X = (SCREEN_WIDTH - (MINESWEEPER_COLS * MINESWEEPER_CELL_SIZE)) // 2
+MINESWEEPER_OFFSET_Y = (SCREEN_HEIGHT - (MINESWEEPER_ROWS * MINESWEEPER_CELL_SIZE)) // 2 + 30
+
+# 2048
+GAME_2048_SIZE = 4
+GAME_2048_CELL_SIZE = 100
+GAME_2048_PADDING = 10
+GAME_2048_COLORS = {
+    0: (50, 50, 50),
+    2: (238, 228, 218),
+    4: (237, 224, 200),
+    8: (242, 177, 121),
+    16: (245, 149, 99),
+    32: (246, 124, 95),
+    64: (246, 94, 59),
+    128: (237, 207, 114),
+    256: (237, 204, 97),
+    512: (237, 200, 80),
+    1024: (237, 197, 63),
+    2048: (237, 194, 46)
+}
+
+# Asteroids
+ASTEROIDS_SHIP_SIZE = 15
+ASTEROIDS_SPEED = 5
+ASTEROIDS_ROTATION_SPEED = 5
+ASTEROIDS_FRICTION = 0.98
+ASTEROIDS_BULLET_SPEED = 10
+ASTEROIDS_BULLET_LIFETIME = 60
+

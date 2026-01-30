@@ -1,4 +1,5 @@
 import pygame
+import random
 from settings import *
 
 class MainMenu:
@@ -6,10 +7,24 @@ class MainMenu:
         self.screen = screen
         self.game_manager = game_manager
         self.games = games_dict # Dictionary of {"Name": GameInstance}
-        self.game_names = list(self.games.keys())
+        self.game_names = list(self.games.keys()) + ["Quit"]
         self.selected_index = 0
         self.font_title = pygame.font.SysFont(FONT_NAME, FONT_SIZE_TITLE)
         self.font_menu = pygame.font.SysFont(FONT_NAME, FONT_SIZE_MENU)
+        
+        # Background Particles
+        self.particles = []
+        for _ in range(50):
+            self.particles.append(self._create_particle())
+
+    def _create_particle(self):
+        return {
+            'x': random.randint(0, SCREEN_WIDTH),
+            'y': random.randint(0, SCREEN_HEIGHT),
+            'speed': random.randint(1, 3),
+            'size': random.randint(1, 3),
+            'color': random.choice([COLORS["ACCENT"], COLORS["HIGHLIGHT"], COLORS["GRID"]])
+        }
 
     def handle_events(self, event):
         if event.type == pygame.KEYDOWN:
@@ -18,29 +33,53 @@ class MainMenu:
             elif event.key == pygame.K_DOWN:
                 self.selected_index = (self.selected_index + 1) % len(self.game_names)
             elif event.key == pygame.K_RETURN:
-                selected_game_name = self.game_names[self.selected_index]
-                self.game_manager.set_state(self.games[selected_game_name])
+                selected_option = self.game_names[self.selected_index]
+                if selected_option == "Quit":
+                    pygame.event.post(pygame.event.Event(pygame.QUIT))
+                else:
+                    self.game_manager.set_state(self.games[selected_option])
 
     def update(self):
-        pass
+        # Update particles
+        for p in self.particles:
+            p['y'] += p['speed']
+            if p['y'] > SCREEN_HEIGHT:
+                p['y'] = 0
+                p['x'] = random.randint(0, SCREEN_WIDTH)
 
     def draw(self):
         self.screen.fill(COLORS["BACKGROUND"])
         
+        # Draw Particles
+        for p in self.particles:
+            pygame.draw.rect(self.screen, p['color'], (p['x'], p['y'], p['size'], p['size']))
+
         # Draw Title
         title_surf = self.font_title.render(TITLE, True, COLORS["ACCENT"])
         title_rect = title_surf.get_rect(center=(SCREEN_WIDTH // 2, 100))
+        
+        # Simple Shadow for Title
+        shadow_surf = self.font_title.render(TITLE, True, COLORS["HIGHLIGHT"])
+        shadow_rect = shadow_surf.get_rect(center=(SCREEN_WIDTH // 2 + 3, 100 + 3))
+        self.screen.blit(shadow_surf, shadow_rect)
         self.screen.blit(title_surf, title_rect)
 
         # Draw Menu Options
         for i, name in enumerate(self.game_names):
-            color = COLORS["HIGHLIGHT"] if i == self.selected_index else COLORS["TEXT"]
-            text_surf = self.font_menu.render(name, True, color)
-            rect = text_surf.get_rect(center=(SCREEN_WIDTH // 2, 250 + i * 60))
+            if i == self.selected_index:
+                color = COLORS["HIGHLIGHT"]
+                # Add indicator
+                indicator = "> "
+            else:
+                color = COLORS["TEXT"]
+                indicator = "  "
+            
+            text_surf = self.font_menu.render(indicator + name, True, color)
+            rect = text_surf.get_rect(center=(SCREEN_WIDTH // 2, 250 + i * 50))
             self.screen.blit(text_surf, rect)
 
         # Draw Instructions
-        inst_surf = self.font_menu.render("Use ARROWS to Select, ENTER to Play", True, COLORS["GRID"])
+        inst_surf = self.font_menu.render("ARROWS to Select, ENTER to Play", True, COLORS["GRID"])
         inst_rect = inst_surf.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT - 50))
         self.screen.blit(inst_surf, inst_rect)
     
