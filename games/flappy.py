@@ -4,8 +4,13 @@ from settings import *
 from games.base_game import BaseGame
 
 class FlappyGame(BaseGame):
+<<<<<<< HEAD
     def __init__(self, screen, return_to_menu_callback, highscore_manager=None, sound_manager=None, game_name="Flappy"):
         super().__init__(screen, create_game_callback=None, game_over_callback=None, highscore_manager=highscore_manager, sound_manager=sound_manager, game_name=game_name)
+=======
+    def __init__(self, screen, return_to_menu_callback, highscore_manager=None, game_name="Flappy"):
+        super().__init__(screen, create_game_callback=None, game_over_callback=None, highscore_manager=highscore_manager, game_name=game_name)
+>>>>>>> origin/main
         self.return_to_menu = return_to_menu_callback
         self.font = pygame.font.SysFont(FONT_NAME, FONT_SIZE_HUD)
         self.reset()
@@ -30,7 +35,10 @@ class FlappyGame(BaseGame):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 self.bird_velocity = FLAPPY_JUMP_STRENGTH
+<<<<<<< HEAD
                 self.play_sound("jump")
+=======
+>>>>>>> origin/main
             elif event.key == pygame.K_ESCAPE:
                 self.return_to_menu()
 
@@ -55,7 +63,10 @@ class FlappyGame(BaseGame):
             
             if not pipe['passed'] and pipe['top'].right < self.bird_rect.left:
                 self.score += 1
+<<<<<<< HEAD
                 self.play_sound("score")
+=======
+>>>>>>> origin/main
                 pipe['passed'] = True
             
             if pipe['top'].right < 0:
@@ -64,12 +75,18 @@ class FlappyGame(BaseGame):
             # Collision Check
             if self.bird_rect.colliderect(pipe['top']) or self.bird_rect.colliderect(pipe['bottom']):
                 self.game_over = True
+<<<<<<< HEAD
                 self.play_sound("explosion")
+=======
+>>>>>>> origin/main
 
         # Ground/Ceiling Collision
         if self.bird_rect.top < 0 or self.bird_rect.bottom > SCREEN_HEIGHT:
             self.game_over = True
+<<<<<<< HEAD
             self.play_sound("explosion")
+=======
+>>>>>>> origin/main
 
     def _create_pipe(self):
         gap_y = random.randint(100, SCREEN_HEIGHT - 100 - FLAPPY_PIPE_GAP)

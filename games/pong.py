@@ -4,8 +4,13 @@ from settings import *
 from games.base_game import BaseGame
 
 class PongGame(BaseGame):
+<<<<<<< HEAD
     def __init__(self, screen, return_to_menu_callback, highscore_manager=None, sound_manager=None, game_name="Pong"):
         super().__init__(screen, create_game_callback=None, game_over_callback=None, highscore_manager=highscore_manager, sound_manager=sound_manager, game_name=game_name)
+=======
+    def __init__(self, screen, return_to_menu_callback, highscore_manager=None, game_name="Pong"):
+        super().__init__(screen, create_game_callback=None, game_over_callback=None, highscore_manager=highscore_manager, game_name=game_name)
+>>>>>>> origin/main
         self.return_to_menu = return_to_menu_callback
         self.font = pygame.font.SysFont(FONT_NAME, FONT_SIZE_HUD)
         self.reset()
@@ -71,33 +76,51 @@ class PongGame(BaseGame):
         # Ball Collisions with Paddles
         if self.ball.colliderect(self.paddle_left) and self.ball_speed_x < 0:
             self.ball_speed_x *= -1.05 # Increase speed slightly
+<<<<<<< HEAD
             self.play_sound("select")
         
         if self.ball.colliderect(self.paddle_right) and self.ball_speed_x > 0:
             self.ball_speed_x *= -1.05
             self.play_sound("select")
+=======
+        
+        if self.ball.colliderect(self.paddle_right) and self.ball_speed_x > 0:
+            self.ball_speed_x *= -1.05
+>>>>>>> origin/main
 
         # Scoring
         if self.ball.left <= 0:
             self.score_right += 1
+<<<<<<< HEAD
             self.play_sound("score")
             self._reset_ball()
         elif self.ball.right >= SCREEN_WIDTH:
             self.score_left += 1
             self.play_sound("score")
+=======
+            self._reset_ball()
+        elif self.ball.right >= SCREEN_WIDTH:
+            self.score_left += 1
+>>>>>>> origin/main
             self._reset_ball()
 
         # Win Condition
         if self.score_left >= 10:
             self.game_over = True
+<<<<<<< HEAD
             self.play_sound("gameover")
+=======
+>>>>>>> origin/main
             self.winner = "PLAYER"
             # In Pong, score isn't usually the highscore metric (usually it's win streak or just winning), 
             # but let's save the winning score difference or just the player score.
             self.check_and_save_highscore(self.score_left) 
         elif self.score_right >= 10:
             self.game_over = True
+<<<<<<< HEAD
             self.play_sound("gameover")
+=======
+>>>>>>> origin/main
             self.winner = "COMPUTER"
             self.check_and_save_highscore(self.score_left) # Save player score even if lost
 

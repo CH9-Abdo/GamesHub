@@ -3,21 +3,31 @@ from abc import ABC, abstractmethod
 from settings import *
 
 class BaseGame(ABC):
+<<<<<<< HEAD
     def __init__(self, screen, create_game_callback=None, game_over_callback=None, highscore_manager=None, sound_manager=None, game_name="Unknown"):
+=======
+    def __init__(self, screen, create_game_callback=None, game_over_callback=None, highscore_manager=None, game_name="Unknown"):
+>>>>>>> origin/main
         self.screen = screen
         # Callback to return to menu or switch states
         self.create_game_callback = create_game_callback 
         self.game_over_callback = game_over_callback
         self.highscore_manager = highscore_manager
+<<<<<<< HEAD
         self.sound_manager = sound_manager
+=======
+>>>>>>> origin/main
         self.game_name = game_name
         self.active = False
         self.font_overlay_big = pygame.font.SysFont(FONT_NAME, 64)
         self.font_overlay_small = pygame.font.SysFont(FONT_NAME, 32)
+<<<<<<< HEAD
 
     def play_sound(self, sound_name):
         if self.sound_manager:
             self.sound_manager.play(sound_name)
+=======
+>>>>>>> origin/main
 
     @abstractmethod
     def handle_events(self, event):
